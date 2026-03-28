@@ -31,46 +31,58 @@ export default function MyPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-white mb-6">마이페이지</h1>
+    <div className="max-w-xl mx-auto">
+      <h1 className="text-lg font-bold text-white mb-5">마이페이지</h1>
 
-      {/* Profile */}
-      <div className="bg-[#1a1a1a] rounded-xl p-5 mb-6 border border-[#2a2a2a]">
-        <p className="text-white font-semibold text-lg">{user.nickname}</p>
-        <p className="text-gray-400 text-sm mt-1">{user.email}</p>
+      {/* Profile Card */}
+      <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] p-5 mb-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-[#252d3d] flex items-center justify-center">
+            <span className="text-xl font-bold text-slate-300">
+              {user.nickname.charAt(0).toUpperCase()}
+            </span>
+          </div>
+          <div>
+            <p className="text-white font-semibold">{user.nickname}</p>
+            <p className="text-slate-500 text-sm mt-0.5">{user.email}</p>
+          </div>
+        </div>
       </div>
 
       {/* Subscribed Drivers */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4">구독 드라이버</h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">구독 드라이버</h2>
+          <span className="text-xs text-slate-600">{drivers?.length ?? 0}명</span>
+        </div>
 
-        {driversLoading ? (
-          <LoadingSpinner />
-        ) : drivers && drivers.length > 0 ? (
-          <div className="space-y-2">
+        {driversLoading ? <LoadingSpinner /> : drivers && drivers.length > 0 ? (
+          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-hidden">
             {drivers.map((driver) => (
               <div
                 key={driver.id}
-                className="flex items-center bg-[#1a1a1a] rounded-xl px-5 py-4 border border-[#2a2a2a]"
+                className="flex items-center px-4 py-3.5 border-b border-[#252d3d] last:border-0"
               >
                 {driver.headshotUrl && (
                   <img
                     src={driver.headshotUrl}
                     alt={driver.lastName}
-                    className="w-10 h-10 rounded-full object-cover bg-[#2a2a2a] mr-4"
+                    className="w-9 h-9 rounded-full object-cover bg-[#252d3d] mr-3 shrink-0"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                   />
                 )}
-                <div className="flex-1">
-                  <p className="text-white font-medium">
+                <span className="text-xs font-bold text-white bg-[#252d3d] rounded px-1.5 py-0.5 mr-3 font-mono shrink-0">
+                  {driver.code}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-white font-medium">
                     {driver.firstName} {driver.lastName}
-                    <span className="ml-2 text-sm text-gray-400">#{driver.driverNumber}</span>
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">{driver.teamName}</p>
+                  <p className="text-xs text-slate-500 truncate">{driver.teamName}</p>
                 </div>
                 <button
                   onClick={() => unsubscribeMutation.mutate(driver.id)}
-                  className="text-xs text-gray-500 hover:text-red-400 transition-colors"
+                  className="text-xs text-slate-600 hover:text-red-400 transition-colors ml-3 shrink-0"
                 >
                   구독 해제
                 </button>
@@ -78,9 +90,9 @@ export default function MyPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-[#1a1a1a] rounded-xl p-8 text-center border border-[#2a2a2a]">
-            <p className="text-gray-500 text-sm mb-3">구독 중인 드라이버가 없습니다</p>
-            <a href="/drivers" className="text-red-400 text-sm hover:underline">
+          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] p-10 text-center">
+            <p className="text-slate-500 text-sm mb-3">구독 중인 드라이버가 없습니다</p>
+            <a href="/drivers" className="text-[#e10600] text-sm hover:underline">
               드라이버 구독하러 가기 →
             </a>
           </div>

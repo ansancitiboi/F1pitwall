@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { logout as logoutApi } from '../../api'
 import { useAuthStore } from '../../store/auth'
 
@@ -13,28 +13,47 @@ export default function Navbar() {
     navigate('/login')
   }
 
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `text-sm font-medium transition-colors pb-0.5 border-b-2 ${
+      isActive
+        ? 'text-white border-[#e10600]'
+        : 'text-slate-400 border-transparent hover:text-white'
+    }`
+
   return (
-    <nav className="bg-[#1a1a1a] border-b border-[#2a2a2a] sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link to="/" className="text-red-500 font-bold text-xl tracking-tight">
-          F1 PIT WALL
+    <nav className="bg-[#1a1f2e] border-b border-[#252d3d] sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2.5 shrink-0">
+          <div className="w-7 h-7 bg-[#e10600] rounded flex items-center justify-center">
+            <span className="text-white font-black text-xs">F1</span>
+          </div>
+          <span className="text-white font-bold text-sm tracking-wide">PIT WALL</span>
         </Link>
 
-        <div className="flex items-center gap-6 text-sm text-gray-400">
-          <Link to="/drivers" className="hover:text-white transition-colors">Drivers</Link>
-          <Link to="/races" className="hover:text-white transition-colors">Races</Link>
-          <Link to="/live" className="hover:text-white transition-colors flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+        {/* Nav Links */}
+        <div className="flex items-center gap-6">
+          <NavLink to="/drivers" className={linkClass}>Drivers</NavLink>
+          <NavLink to="/races" className={linkClass}>Races</NavLink>
+          <NavLink to="/live" className={({ isActive }) =>
+            `text-sm font-medium transition-colors pb-0.5 border-b-2 flex items-center gap-1.5 ${
+              isActive ? 'text-white border-[#e10600]' : 'text-slate-400 border-transparent hover:text-white'
+            }`
+          }>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#e10600] animate-pulse" />
             Live
-          </Link>
-          <Link to="/news" className="hover:text-white transition-colors">News</Link>
+          </NavLink>
+          <NavLink to="/news" className={linkClass}>News</NavLink>
+        </div>
 
+        {/* Auth */}
+        <div className="flex items-center gap-3">
           {isLoggedIn ? (
             <>
-              <Link to="/me" className="hover:text-white transition-colors">My Page</Link>
+              <NavLink to="/me" className={linkClass}>My Page</NavLink>
               <button
                 onClick={handleLogout}
-                className="text-gray-500 hover:text-white transition-colors"
+                className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
               >
                 Logout
               </button>
@@ -42,7 +61,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded transition-colors"
+              className="text-sm font-medium bg-[#e10600] hover:bg-red-600 text-white px-4 py-1.5 rounded transition-colors"
             >
               Login
             </Link>

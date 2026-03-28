@@ -13,92 +13,92 @@ export default function HomePage() {
 
   const { data: newsPage, isLoading: newsLoading } = useQuery({
     queryKey: ['news', 0],
-    queryFn: () => getNews(0, 5),
+    queryFn: () => getNews(0, 6),
   })
 
   return (
-    <div className="space-y-10">
-      {/* Hero */}
-      <div className="text-center py-10 border-b border-[#2a2a2a]">
-        <h1 className="text-4xl font-bold text-white mb-2">
-          F1 <span className="text-red-500">PIT WALL</span>
-        </h1>
-        <p className="text-gray-400">실시간 F1 레이싱 데이터 플랫폼</p>
+    <div className="space-y-6">
+      {/* Header Banner */}
+      <div className="bg-[#1a1f2e] rounded-xl p-5 border border-[#252d3d] flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-white">F1 Pit Wall</h1>
+          <p className="text-slate-400 text-sm mt-0.5">
+            실시간 레이싱 데이터 플랫폼 · {CURRENT_SEASON} Season
+          </p>
+        </div>
+        <Link
+          to="/live"
+          className="flex items-center gap-2 bg-[#e10600] hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          Live 보기
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Championship Standings */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">
-              {CURRENT_SEASON} 드라이버 챔피언십
+        <section className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              드라이버 챔피언십
             </h2>
+            <span className="text-xs text-slate-600">{CURRENT_SEASON}</span>
           </div>
 
-          {standingsLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <div className="bg-[#1a1a1a] rounded-xl overflow-hidden">
-              {standings?.slice(0, 10).map((s) => (
+          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-hidden">
+            {standingsLoading ? <LoadingSpinner /> : (
+              standings?.slice(0, 10).map((s, i) => (
                 <div
                   key={s.driverId}
-                  className="flex items-center px-4 py-3 border-b border-[#2a2a2a] last:border-0 hover:bg-[#222] transition-colors"
+                  className="flex items-center px-4 py-2.5 border-b border-[#252d3d] last:border-0 hover:bg-[#1e2535] transition-colors"
                 >
-                  <span className="w-6 text-gray-500 text-sm font-mono">{s.rank}</span>
-                  <span className="w-12 text-center font-bold text-sm bg-[#2a2a2a] rounded px-1 py-0.5 text-white mx-3">
+                  <span className={`w-5 text-xs font-bold font-mono ${i === 0 ? 'text-yellow-400' : i < 3 ? 'text-slate-300' : 'text-slate-600'}`}>
+                    {s.rank}
+                  </span>
+                  <span className="w-10 text-center text-xs font-bold text-white bg-[#252d3d] rounded px-1 py-0.5 mx-3 font-mono">
                     {s.driverCode}
                   </span>
-                  <span className="flex-1 text-sm text-gray-300">{s.driverName}</span>
-                  <span className="text-xs text-gray-500 mr-4">{s.teamName}</span>
-                  <span className="font-bold text-white text-sm">{s.points} pts</span>
+                  <span className="flex-1 text-sm text-slate-300 truncate">{s.driverName}</span>
+                  <span className="text-sm font-bold text-white tabular-nums">{s.points}</span>
+                  <span className="text-xs text-slate-600 ml-0.5">pts</span>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </section>
 
         {/* Latest News */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">최신 뉴스</h2>
-            <Link to="/news" className="text-sm text-red-500 hover:text-red-400">
+        <section className="lg:col-span-3">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">최신 뉴스</h2>
+            <Link to="/news" className="text-xs text-[#e10600] hover:text-red-400 transition-colors">
               전체 보기 →
             </Link>
           </div>
 
-          {newsLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <div className="space-y-3">
+          {newsLoading ? <LoadingSpinner /> : (
+            <div className="space-y-2">
               {newsPage?.content.map((news) => (
                 <a
                   key={news.id}
                   href={news.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block bg-[#1a1a1a] rounded-xl p-4 hover:bg-[#222] transition-colors"
+                  className="flex gap-3 bg-[#1a1f2e] rounded-xl p-4 border border-[#252d3d] hover:border-[#2d3748] hover:bg-[#1e2535] transition-colors group"
                 >
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <p className="text-sm text-white font-medium leading-snug line-clamp-2">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-white font-medium leading-snug mb-1.5 line-clamp-2 group-hover:text-slate-100">
                       {news.title}
                     </p>
-                    <span className="text-xs text-gray-500 whitespace-nowrap shrink-0">
-                      {news.source}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-400 line-clamp-2">{news.summary}</p>
-                  {news.tags && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {news.tags.split(',').slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs bg-red-900/30 text-red-400 px-1.5 py-0.5 rounded"
-                        >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-600 shrink-0">{news.source}</span>
+                      {news.tags && news.tags.split(',').slice(0, 2).map((tag) => (
+                        <span key={tag} className="text-xs bg-[#252d3d] text-slate-400 px-1.5 py-0.5 rounded shrink-0">
                           {tag.trim()}
                         </span>
                       ))}
                     </div>
-                  )}
+                  </div>
                 </a>
               ))}
             </div>

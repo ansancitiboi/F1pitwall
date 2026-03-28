@@ -16,12 +16,12 @@ export default function RacesPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-white">레이스</h1>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-lg font-bold text-white">레이스</h1>
         <select
           value={season}
           onChange={(e) => setSeason(Number(e.target.value))}
-          className="bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded px-3 py-1.5"
+          className="bg-[#1a1f2e] border border-[#252d3d] text-slate-300 text-sm rounded-lg px-3 py-1.5 outline-none focus:border-[#e10600] transition-colors"
         >
           {[2025, 2024, 2023].map((y) => (
             <option key={y} value={y}>{y}</option>
@@ -29,32 +29,31 @@ export default function RacesPage() {
         </select>
       </div>
 
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="space-y-2">
+      {isLoading ? <LoadingSpinner /> : (
+        <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-hidden">
           {races?.map((race) => (
             <Link
               key={race.id}
               to={`/races/${race.id}`}
-              className="flex items-center bg-[#1a1a1a] rounded-xl px-5 py-4 border border-[#2a2a2a] hover:border-[#3a3a3a] hover:bg-[#222] transition-colors"
+              className="flex items-center px-5 py-3.5 border-b border-[#252d3d] last:border-0 hover:bg-[#1e2535] transition-colors group"
             >
-              <span className="w-8 text-gray-500 text-sm font-mono">R{race.round}</span>
-              <div className="flex-1 ml-4">
-                <p className="text-white font-medium">{race.raceName}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{race.circuitName} · {race.country}</p>
+              <span className="w-8 text-xs font-bold text-slate-600 font-mono">R{race.round}</span>
+
+              <div className="flex-1 ml-3">
+                <p className="text-sm font-medium text-white group-hover:text-slate-100">{race.raceName}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{race.circuitName} · {race.country}</p>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-300">{race.raceDate}</p>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded mt-1 inline-block ${
-                    race.status === 'COMPLETED'
-                      ? 'bg-green-900/40 text-green-400'
-                      : 'bg-yellow-900/40 text-yellow-400'
-                  }`}
-                >
+
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-slate-500 tabular-nums">{race.raceDate}</span>
+                <span className={`text-xs px-2 py-0.5 rounded font-medium ${
+                  race.status === 'COMPLETED'
+                    ? 'bg-emerald-500/10 text-emerald-400'
+                    : 'bg-blue-500/10 text-blue-400'
+                }`}>
                   {race.status === 'COMPLETED' ? '완료' : '예정'}
                 </span>
+                <span className="text-slate-600 group-hover:text-slate-400 transition-colors">›</span>
               </div>
             </Link>
           ))}

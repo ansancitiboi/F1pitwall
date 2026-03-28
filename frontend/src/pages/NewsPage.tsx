@@ -36,20 +36,23 @@ export default function NewsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">뉴스</h1>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-lg font-bold text-white">뉴스</h1>
+        <span className="text-xs text-slate-500">Claude AI 요약</span>
+      </div>
 
       {/* Search */}
-      <form onSubmit={handleSearch} className="flex gap-2 mb-6">
+      <form onSubmit={handleSearch} className="flex gap-2 mb-5">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="드라이버, 팀, 키워드 검색..."
-          className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-lg px-4 py-2.5 outline-none focus:border-red-500 transition-colors"
+          className="flex-1 bg-[#1a1f2e] border border-[#252d3d] text-white text-sm rounded-lg px-4 py-2.5 outline-none focus:border-[#e10600] transition-colors placeholder:text-slate-600"
         />
         <button
           type="submit"
-          className="bg-red-600 hover:bg-red-500 text-white text-sm px-4 py-2.5 rounded-lg transition-colors"
+          className="bg-[#e10600] hover:bg-red-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
         >
           검색
         </button>
@@ -57,71 +60,68 @@ export default function NewsPage() {
           <button
             type="button"
             onClick={handleClear}
-            className="bg-[#2a2a2a] hover:bg-[#333] text-gray-300 text-sm px-4 py-2.5 rounded-lg transition-colors"
+            className="bg-[#1a1f2e] border border-[#252d3d] hover:bg-[#1e2535] text-slate-400 text-sm px-4 py-2.5 rounded-lg transition-colors"
           >
             초기화
           </button>
         )}
       </form>
 
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
+      {isLoading ? <LoadingSpinner /> : (
         <>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {items?.map((news) => (
               <a
                 key={news.id}
                 href={news.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-[#1a1a1a] rounded-xl p-5 border border-[#2a2a2a] hover:border-[#3a3a3a] hover:bg-[#222] transition-colors"
+                className="flex gap-4 bg-[#1a1f2e] rounded-xl p-4 border border-[#252d3d] hover:border-[#2d3748] hover:bg-[#1e2535] transition-colors group"
               >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <p className="text-white font-medium leading-snug">{news.title}</p>
-                  <span className="text-xs text-gray-500 whitespace-nowrap shrink-0 mt-0.5">
-                    {news.source}
-                  </span>
-                </div>
-
-                <p className="text-sm text-gray-400 leading-relaxed mb-3">{news.summary}</p>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-wrap gap-1">
-                    {news.tags && news.tags.split(',').map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs bg-red-900/30 text-red-400 px-1.5 py-0.5 rounded"
-                      >
-                        {tag.trim()}
-                      </span>
-                    ))}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <p className="text-sm text-white font-medium leading-snug group-hover:text-slate-100">
+                      {news.title}
+                    </p>
+                    <span className="text-xs text-slate-600 whitespace-nowrap shrink-0">{news.source}</span>
                   </div>
-                  <span className="text-xs text-gray-600">
-                    {new Date(news.publishedAt).toLocaleDateString('ko-KR')}
-                  </span>
+
+                  <p className="text-xs text-slate-400 leading-relaxed mb-2.5 line-clamp-2">{news.summary}</p>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1">
+                      {news.tags && news.tags.split(',').slice(0, 4).map((tag) => (
+                        <span key={tag} className="text-xs bg-[#252d3d] text-slate-400 px-1.5 py-0.5 rounded">
+                          {tag.trim()}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-xs text-slate-600 tabular-nums">
+                      {new Date(news.publishedAt).toLocaleDateString('ko-KR')}
+                    </span>
+                  </div>
                 </div>
               </a>
             ))}
           </div>
 
-          {/* Pagination (list mode only) */}
+          {/* Pagination */}
           {!submitted && newsPage && newsPage.totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center items-center gap-3 mt-8">
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="px-4 py-2 text-sm bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-gray-300 disabled:opacity-40 hover:bg-[#222] transition-colors"
+                className="px-4 py-2 text-sm bg-[#1a1f2e] border border-[#252d3d] rounded-lg text-slate-400 disabled:opacity-30 hover:bg-[#1e2535] transition-colors"
               >
                 이전
               </button>
-              <span className="px-4 py-2 text-sm text-gray-400">
+              <span className="text-sm text-slate-500 tabular-nums">
                 {page + 1} / {newsPage.totalPages}
               </span>
               <button
                 onClick={() => setPage((p) => Math.min(newsPage.totalPages - 1, p + 1))}
                 disabled={page === newsPage.totalPages - 1}
-                className="px-4 py-2 text-sm bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-gray-300 disabled:opacity-40 hover:bg-[#222] transition-colors"
+                className="px-4 py-2 text-sm bg-[#1a1f2e] border border-[#252d3d] rounded-lg text-slate-400 disabled:opacity-30 hover:bg-[#1e2535] transition-colors"
               >
                 다음
               </button>

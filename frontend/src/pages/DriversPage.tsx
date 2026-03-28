@@ -42,48 +42,66 @@ export default function DriversPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">드라이버</h1>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-lg font-bold text-white">드라이버</h1>
+        {!isLoggedIn && (
+          <p className="text-xs text-slate-500">구독하려면 <a href="/login" className="text-[#e10600]">로그인</a>하세요</p>
+        )}
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {drivers?.map((driver) => (
-          <div
-            key={driver.id}
-            className="bg-[#1a1a1a] rounded-xl p-4 border border-[#2a2a2a] hover:border-[#3a3a3a] transition-colors"
-          >
-            {driver.headshotUrl && (
-              <img
-                src={driver.headshotUrl}
-                alt={driver.lastName}
-                className="w-20 h-20 object-cover rounded-full mx-auto mb-3 bg-[#2a2a2a]"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-              />
-            )}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {drivers?.map((driver) => {
+          const isSubscribed = subscribedIds.has(driver.id)
+          return (
+            <div
+              key={driver.id}
+              className={`bg-[#1a1f2e] rounded-xl border transition-colors overflow-hidden ${
+                isSubscribed ? 'border-[#e10600]/40' : 'border-[#252d3d] hover:border-[#2d3748]'
+              }`}
+            >
+              <div className="bg-[#1e2535] h-24 flex items-center justify-center">
+                {driver.headshotUrl ? (
+                  <img
+                    src={driver.headshotUrl}
+                    alt={driver.lastName}
+                    className="h-24 w-full object-cover object-top"
+                    onError={(e) => {
+                      const el = e.target as HTMLImageElement
+                      el.style.display = 'none'
+                      el.parentElement!.innerHTML = `<span class="text-3xl font-black text-slate-600">${driver.driverNumber}</span>`
+                    }}
+                  />
+                ) : (
+                  <span className="text-3xl font-black text-slate-600">{driver.driverNumber}</span>
+                )}
+              </div>
 
-            <div className="text-center">
-              <span className="inline-block text-xs font-bold bg-red-600 text-white px-2 py-0.5 rounded mb-2">
-                #{driver.driverNumber}
-              </span>
-              <p className="text-white font-semibold">
-                {driver.firstName} {driver.lastName}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5">{driver.teamName}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{driver.nationality}</p>
+              <div className="p-3">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className="text-xs font-bold text-[#e10600] font-mono">#{driver.driverNumber}</span>
+                  <span className="text-xs font-bold text-white bg-[#252d3d] px-1.5 rounded font-mono">{driver.code}</span>
+                </div>
+                <p className="text-sm font-semibold text-white leading-tight">
+                  {driver.firstName} {driver.lastName}
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5 truncate">{driver.teamName}</p>
+
+                {isLoggedIn && (
+                  <button
+                    onClick={() => toggleSubscribe(driver.id)}
+                    className={`w-full mt-2.5 py-1.5 rounded text-xs font-medium transition-colors ${
+                      isSubscribed
+                        ? 'bg-[#e10600]/10 text-[#e10600] hover:bg-[#e10600]/20'
+                        : 'bg-[#252d3d] text-slate-400 hover:bg-[#2d3748] hover:text-white'
+                    }`}
+                  >
+                    {isSubscribed ? '구독 중 ✓' : '+ 구독'}
+                  </button>
+                )}
+              </div>
             </div>
-
-            {isLoggedIn && (
-              <button
-                onClick={() => toggleSubscribe(driver.id)}
-                className={`w-full mt-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  subscribedIds.has(driver.id)
-                    ? 'bg-red-900/40 text-red-400 hover:bg-red-900/60'
-                    : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#333]'
-                }`}
-              >
-                {subscribedIds.has(driver.id) ? '구독 중 ✓' : '+ 구독'}
-              </button>
-            )}
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
