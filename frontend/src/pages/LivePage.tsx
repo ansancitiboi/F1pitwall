@@ -72,7 +72,7 @@ export default function LivePage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Live Positions */}
         <section>
           <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">현재 순위</h2>

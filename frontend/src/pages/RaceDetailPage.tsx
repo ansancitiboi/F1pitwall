@@ -75,7 +75,8 @@ export default function RaceDetailPage() {
 
       {tab === 'results' && (
         resultsLoading ? <LoadingSpinner /> : (
-          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-hidden">
+          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-x-auto">
+            <div className="min-w-[500px]">
             <div className="grid grid-cols-[2rem_3rem_1fr_1fr_4rem_2rem] px-5 py-2 text-xs text-slate-600 border-b border-[#252d3d] font-medium uppercase tracking-wider">
               <span>P</span>
               <span></span>
@@ -101,13 +102,15 @@ export default function RaceDetailPage() {
                 <span className="text-center">{r.fastestLap && <span className="text-purple-400 text-xs">⚡</span>}</span>
               </div>
             ))}
+            </div>
           </div>
         )
       )}
 
       {tab === 'pitstops' && (
         pitLoading ? <LoadingSpinner /> : (
-          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-hidden">
+          <div className="bg-[#1a1f2e] rounded-xl border border-[#252d3d] overflow-x-auto">
+            <div className="min-w-[360px]">
             <div className="grid grid-cols-4 px-5 py-2 text-xs text-slate-600 border-b border-[#252d3d] font-medium uppercase tracking-wider">
               <span>드라이버</span>
               <span>랩</span>
@@ -125,6 +128,7 @@ export default function RaceDetailPage() {
                 <span className="text-sm text-slate-300 font-medium tabular-nums">{p.duration.toFixed(1)}s</span>
               </div>
             ))}
+            </div>
           </div>
         )
       )}
