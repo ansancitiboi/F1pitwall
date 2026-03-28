@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: F1
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/f1pitwall?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  elasticsearch:
+    uris: http://localhost:9200
+
+  batch:
+    job:
+      enabled: false  # 앱 시작 시 배치 자동 실행 방지
+    jdbc:
+      initialize-schema: always
+
+jwt:
+  secret: your-secret-key-here-must-be-at-least-32-characters-long
+  access-expiration: 3600000     # 1시간
+  refresh-expiration: 604800000  # 7일
+
+openf1:
+  base-url: https://api.openf1.org/v1
+
+claude:
+  api-key: your-claude-api-key
+  base-url: https://api.anthropic.com
+  model: claude-haiku-4-5-20251001
+  max-tokens: 1024
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
